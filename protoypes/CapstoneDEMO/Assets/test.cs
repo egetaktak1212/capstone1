@@ -9,7 +9,7 @@ public class MidiDebug : MonoBehaviour
     public MidiStreamPlayer midiStreamPlayer;
     public GameObject pianomodel;
 
-    Dictionary<string, Renderer> keyRenderers = new Dictionary<string, Renderer>();
+    Dictionary<string, Transform> keys = new Dictionary<string, Transform>();
 
     List<int> pressed = new List<int>();
 
@@ -20,9 +20,8 @@ public class MidiDebug : MonoBehaviour
         InputSystem.onDeviceChange += OnDeviceChange;
 
         foreach (Transform child in pianomodel.transform) {
-            Renderer r = child.GetComponent<Renderer>();
-            if (r != null) {
-                keyRenderers[child.name] = r;
+            if (child != null) {
+                keys[child.name] = child;
             }
         }
 
@@ -49,7 +48,7 @@ public class MidiDebug : MonoBehaviour
 
     void OnNoteOn(MidiNoteControl note, float velocity)
     {
-        Debug.Log($"note: {note.noteNumber} vel={velocity}");
+        //Debug.Log($"note: {note.noteNumber} vel={velocity}");
 
         if (!pressed.Contains(note.noteNumber)) {
             pressed.Add(note.noteNumber);
@@ -60,7 +59,7 @@ public class MidiDebug : MonoBehaviour
             Command = MPTKCommand.NoteOn,
             Value = note.noteNumber,
             Channel = 0,
-            Velocity = Mathf.RoundToInt(velocity * 127),
+            Velocity = 100,
             Duration = -1
         };
 
@@ -68,15 +67,15 @@ public class MidiDebug : MonoBehaviour
 
         string noteName = note.noteNumber.ToString();
 
-        if (keyRenderers.TryGetValue(noteName, out Renderer r)) {
-            r.material.color = Color.yellow;
+        if (keys.TryGetValue(noteName, out Transform key)) {
+            key.GetComponent<PressLift>().pressed = true;
         }
 
     }
 
     void OnNoteOff(MidiNoteControl note)
     {
-        Debug.Log($"note: {note.noteNumber}");
+        //Debug.Log($"note: {note.noteNumber}");
 
         if (pressed.Contains(note.noteNumber))
         {
@@ -99,16 +98,9 @@ public class MidiDebug : MonoBehaviour
         List<int> blackkeys = new List<int> { 49, 51, 54, 56, 58, 61, 63, 66, 68, 70 };
 
 
-        if (keyRenderers.TryGetValue(noteName, out Renderer r))
+        if (keys.TryGetValue(noteName, out Transform key))
         {
-            if (blackkeys.Contains(note.noteNumber))
-            {
-                r.material.color = Color.black;
-            }
-            else
-            {
-                r.material.color = Color.white;
-            }
+            key.GetComponent<PressLift>().pressed = false;
         }
 
     }

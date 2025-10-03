@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class PressLift : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    Animator animator;
+    public bool pressed = false;
+
+
     void Start()
     {
-        
+        // Get the Animator component on this GameObject
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (pressed)
+        {
+            animator.SetBool("isPressed", true);
+        }
+
+        if (!pressed)
+        {
+            animator.SetBool("isPressed", false);
+        }
     }
 }
