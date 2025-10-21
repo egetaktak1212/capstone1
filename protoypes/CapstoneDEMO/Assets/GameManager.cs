@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     List<int> nowpressed = new List<int>();
-    public MidiDebug script;
 
     List<int> cmajor = new List<int>() { 48, 52, 55 };
     List<int> fmajor = new List<int>() {53, 57, 60};
@@ -30,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        nowpressed = script.getPressed();
+        nowpressed = MidiInputs.instance.getPressed();
         nowpressed.Sort();
 
         
@@ -60,7 +59,7 @@ public class GameManager : MonoBehaviour
     {
         cx.SetActive(true);
         while (true) {
-            nowpressed = script.getPressed();
+            nowpressed = MidiInputs.instance.getPressed();
             nowpressed.Sort();
 
             if (nowpressed.SequenceEqual(cmajor))
@@ -78,7 +77,7 @@ public class GameManager : MonoBehaviour
         fx.SetActive(true);
         while (true)
         {
-            nowpressed = script.getPressed();
+            nowpressed = MidiInputs.instance.getPressed();
             nowpressed.Sort();
 
             if (nowpressed.SequenceEqual(fmajor))
@@ -96,7 +95,7 @@ public class GameManager : MonoBehaviour
         ex.SetActive(true);
         while (true)
         {
-            nowpressed = script.getPressed();
+            nowpressed = MidiInputs.instance.getPressed();
             nowpressed.Sort();
 
             if (nowpressed.SequenceEqual(eminor))

@@ -82,6 +82,7 @@
     <string>Palm Bricks</string>
     <string>Patti Smith - Because the Night</string>
     <string>Pergolesi - Stabat Mater</string>
+    <string>Radiohead — Myxomatosis [MIDIfind.com]</string>
     <string>Reayo - Amor de Hombre</string>
     <string>Salvador Henri - Jardin D'hiver</string>
     <string>Satie - Gnossienne 4</string>
@@ -89,10 +90,12 @@
     <string>Satie - Gymnopedie 1</string>
     <string>Satie - Gymnopedie 2</string>
     <string>Satie - Trois Gnossiennes</string>
+    <string>Scratcj2</string>
     <string>Sibelius - Finlandia</string>
     <string>Sibelius - Romance</string>
     <string>Take 5 - by Paul Desmond</string>
     <string>Tchaikovsky - Flower Waltz</string>
+    <string>testMIDI</string>
     <string>Tetris2</string>
     <string>The Christmas Song</string>
     <string>To Make the End of Battle</string>
