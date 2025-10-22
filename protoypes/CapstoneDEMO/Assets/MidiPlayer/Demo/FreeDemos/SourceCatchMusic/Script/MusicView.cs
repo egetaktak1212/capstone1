@@ -257,23 +257,23 @@ namespace MPTKDemoCatchMusic
 
         void Update()
         {
-            if (midiFilePlayer != null && midiFilePlayer.MPTK_IsPlaying)
-            {
-                // Generates random collisions that unfortunately change the music ... for fun!
-                float time = Time.realtimeSinceStartup - LastTimeCollider;
-                if (time > DelayCollider + FirstDelayCollider)
-                {
-                    FirstDelayCollider = 0;
-                    LastTimeCollider = Time.realtimeSinceStartup;
+            //if (midiFilePlayer != null && midiFilePlayer.MPTK_IsPlaying)
+            //{
+            //    // Generates random collisions that unfortunately change the music ... for fun!
+            //    float time = Time.realtimeSinceStartup - LastTimeCollider;
+            //    if (time > DelayCollider + FirstDelayCollider)
+            //    {
+            //        FirstDelayCollider = 0;
+            //        LastTimeCollider = Time.realtimeSinceStartup;
 
-                    float zone = 10;
-                    Vector3 position = new Vector3(UnityEngine.Random.Range(minX + zone, maxX - zone), -5, UnityEngine.Random.Range(minZ + zone, maxZ - zone));
-                    // Instantiate collider (sphere) to interact with note and patch change.
-                    Collide n = Instantiate<Collide>(Collider, position, Quaternion.identity);
-                    n.gameObject.SetActive(true);
-                    n.hideFlags = HideFlags.HideInHierarchy;
-                }
-            }
+            //        float zone = 10;
+            //        Vector3 position = new Vector3(UnityEngine.Random.Range(minX + zone, maxX - zone), -5, UnityEngine.Random.Range(minZ + zone, maxZ - zone));
+            //        // Instantiate collider (sphere) to interact with note and patch change.
+            //        Collide n = Instantiate<Collide>(Collider, position, Quaternion.identity);
+            //        n.gameObject.SetActive(true);
+            //        n.hideFlags = HideFlags.HideInHierarchy;
+            //    }
+            //}
         }
     }
 }
