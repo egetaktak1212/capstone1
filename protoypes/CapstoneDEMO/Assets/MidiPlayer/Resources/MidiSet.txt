@@ -54,6 +54,7 @@
     <string>Faure - Requiem</string>
     <string>Final Fantasy - Village</string>
     <string>Fire Emblem 3 - Theme</string>
+    <string>Health Ponister</string>
     <string>Higelin Jacques - Champagne</string>
     <string>kakariko</string>
     <string>ladolcevita</string>
@@ -95,7 +96,9 @@
     <string>Sibelius - Romance</string>
     <string>Take 5 - by Paul Desmond</string>
     <string>Tchaikovsky - Flower Waltz</string>
+    <string>testestTEST</string>
     <string>testMIDI</string>
+    <string>testMiditest</string>
     <string>Tetris2</string>
     <string>The Christmas Song</string>
     <string>To Make the End of Battle</string>

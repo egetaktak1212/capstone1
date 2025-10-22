@@ -14,6 +14,10 @@ public class MidiInputs : MonoBehaviour
 
     List<int> pressed = new List<int>();
 
+    public List<int> supposedToPress = new List<int>();
+
+    public List<int> upcomingNotes = new List<int>();
+
     private void Awake()
     {
         if (instance == null) {
@@ -30,6 +34,8 @@ public class MidiInputs : MonoBehaviour
             }
         }
     }
+
+
 
 
     public void OnNoteOn(MidiNoteControl note, float velocity)
@@ -56,6 +62,11 @@ public class MidiInputs : MonoBehaviour
         if (keys.TryGetValue(noteName, out Transform key)) {
             key.GetComponent<PressLift>().pressed = true;
         }
+
+        if (!supposedToPress.Contains(note.noteNumber)) {
+            Debug.Log("BAD BAD BAD");
+        }
+
 
     }
 
