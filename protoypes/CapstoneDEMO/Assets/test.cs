@@ -73,7 +73,8 @@ public class MidiInputs : MonoBehaviour
 
         if (!supposedToPress.Contains(note.noteNumber))
         {
-            Debug.Log("BAD BAD BAD");
+            PlayerInfo.instance.decreaseHealth(5);
+            PlayerInfo.instance.madeAMistake();
         }
 
 

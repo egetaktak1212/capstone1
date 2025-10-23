@@ -12,6 +12,10 @@ public class PlayerInfo : MonoBehaviour
 
     public static PlayerInfo instance;
 
+    public bool dead = false;
+
+    public int mistakeCounter = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,7 +42,7 @@ public class PlayerInfo : MonoBehaviour
         Mathf.Clamp(health, 0, maxhealth);
         updateBar();
         if (health <= 0) {
-            Debug.Log("DEAD");
+            dead = true;
         }
     }
 
@@ -57,6 +61,18 @@ public class PlayerInfo : MonoBehaviour
 
         deathBar.fillAmount = 1f-tempHealth/tempMaxHealth;
     }
+
+    public void resetLife() {
+        health = maxhealth;
+        dead = false;
+        mistakeCounter = 0;
+        updateBar();
+    }
+
+    public void madeAMistake() {
+        mistakeCounter++;
+    }
+
 
 
 

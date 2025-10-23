@@ -18,14 +18,21 @@ public class NoteView2 : MonoBehaviour
 
     List<int> notesPressed = new List<int>();
 
+    int noteValue;
+
     private void Awake()
     {
         //MidiInputs.instance.upcomingNotes.Add(noteOn.Value);
+        
+    }
+    private void Start()
+    {
+        noteValue = normalizeNoteValue(noteOn.Value);
     }
 
     private void OnDestroy()
     {
-        //MidiInputs.instance.supposedToPress.Remove(noteOn.Value);
+        MidiInputs.instance.supposedToPress.Remove(noteValue);
         //MidiInputs.instance.upcomingNotes.Contains(noteOn.Value);
         //MidiInputs.instance.upcomingNotes.Remove(noteOn.Value);
         //MidiInputs.instance.upcomingNotes.Contains(noteOn.Value);
@@ -39,12 +46,13 @@ public class NoteView2 : MonoBehaviour
         if (!played && transform.position.z >= -2.327) //we are in range press
         {
             //when we are in range, append the value of the note to an array in the singleton, when we leave range remove it
-
-            //if (!MidiInputs.instance.supposedToPress.Contains(noteOn.Value)) {
-            //    MidiInputs.instance.supposedToPress.Add(noteOn.Value);
-            //}
+            
+            if (!MidiInputs.instance.supposedToPress.Contains(noteValue)) {
+                MidiInputs.instance.supposedToPress.Add(noteValue);
+            }
             getNotesPressed();
-            if (isOurNoteBeingPressed(notesPressed, noteOn.Value)) //if we pressed
+            //Debug.Log(isOurNoteBeingPressed(notesPressed, noteOn.Value));
+            if (isOurNoteBeingPressed(notesPressed, noteValue)) //if we pressed
             {
 
                 played = true;
@@ -63,6 +71,7 @@ public class NoteView2 : MonoBehaviour
         }
         if (!played && transform.position.z >= -0.8) {
             Debug.Log("YOU DIDNT PRESS");
+            PlayerInfo.instance.madeAMistake();
             PlayerInfo.instance.decreaseHealth(15);
             Destroy(this.gameObject);
             
@@ -82,7 +91,11 @@ public class NoteView2 : MonoBehaviour
         return notes.Contains(value);
     }
 
-    
+    int normalizeNoteValue(int value)
+    {
+        return (value % 24) + 48;
+    }
+
 
     void FixedUpdate()
     {

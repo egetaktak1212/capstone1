@@ -25,7 +25,7 @@ public class NoteCreator : MonoBehaviour
 
     public NoteEmpties noteEmpties;
 
-    public static float Speed = 15f;
+    public static float Speed = 7f;
 
     int[] countZ;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

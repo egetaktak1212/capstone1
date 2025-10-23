@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MidiPlayerTK;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -8,40 +9,32 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    List<int> nowpressed = new List<int>();
+    int stepIndex = 1;
 
-    List<int> cmajor = new List<int>() { 48, 52, 55 };
-    List<int> fmajor = new List<int>() {53, 57, 60};
-    List<int> eminor = new List<int>() { 52, 55, 59 };
+    bool songOver;
 
-    [SerializeField] GameObject ccheck;
-    [SerializeField] GameObject fcheck;
-    [SerializeField] GameObject echeck;
-    [SerializeField] GameObject cx;
-    [SerializeField] GameObject fx;
-    [SerializeField] GameObject ex;
+    public MessageController messageEmpty;
+    public DeadController deadController;
+    public PassedController passedController;
+    public GameObject youWinPanel;
 
+    public MidiFilePlayer midiPlayer;
 
+    List<string> songNames = new List<string> {
+        "stageOne",
+        "stageTwo",
+        "stageThree"
+    };
 
-    int question = 1;
 
     void Start()
     {
-        nowpressed = MidiInputs.instance.getPressed();
-        nowpressed.Sort();
-
-        
-
-        ccheck.SetActive(false);
-        fcheck.SetActive(false);
-        echeck.SetActive(false);
-        cx.SetActive(false);
-        fx.SetActive(false);
-        ex.SetActive(false);
-
-        StartCoroutine(chordsequence());
+        messageEmpty.gameObject.SetActive(false);
+        deadController.gameObject.SetActive(false);
+        passedController.gameObject.SetActive(false);
+        youWinPanel.gameObject.SetActive(false);
+        StartCoroutine(playGameSteps());
 
     }
 
@@ -55,61 +48,70 @@ public class GameManager : MonoBehaviour
 
     }
 
-    IEnumerator chordsequence()
+    IEnumerator playGameSteps()
     {
-        cx.SetActive(true);
-        while (true) {
-            nowpressed = MidiInputs.instance.getPressed();
-            nowpressed.Sort();
+        //initial game info
+        messageEmpty.gameObject.SetActive(true);
+        messageEmpty.startMessages(0);
+        yield return new WaitUntil(() => messageEmpty.gameObject.activeSelf == false);
 
-            if (nowpressed.SequenceEqual(cmajor))
-            {
-                break;
-            }
-
-            yield return null;
-        }
-        cx.SetActive(false);
-        ccheck.SetActive(true);
-
-        yield return new WaitForSeconds(1f);
-
-        fx.SetActive(true);
         while (true)
         {
-            nowpressed = MidiInputs.instance.getPressed();
-            nowpressed.Sort();
+            PlayerInfo.instance.resetLife();
 
-            if (nowpressed.SequenceEqual(fmajor))
+            //make the mesages run and dont cont until we are done displaying messages
+            messageEmpty.gameObject.SetActive(true);
+            messageEmpty.startMessages(stepIndex);
+            yield return new WaitUntil(() => messageEmpty.gameObject.activeSelf == false);
+
+            midiPlayer.MPTK_MidiName = songNames[stepIndex-1];//i did minus one cuz i want the 0 to be the intro text
+            midiPlayer.MPTK_Play();
+
+           
+            while (true)
             {
+                //the player is gonna be stuck in here just playing.
+
+                //if the player dies, break and send them back up to the top
+
+                if (!midiPlayer.MPTK_IsPlaying)
+                {
+                    break;
+                }
+                else if (PlayerInfo.instance.dead) { 
+                    midiPlayer.MPTK_Stop();
+                    break;
+                }
+
+                yield return null;
+            }
+            if (PlayerInfo.instance.dead) {
+                while (true) { 
+                    deadController.gameObject.SetActive(true);
+                    deadController.startMessages();
+                    yield return new WaitUntil(() => deadController.gameObject.activeSelf == false);
+                    break;
+                }
+                
+            } else if (!midiPlayer.MPTK_IsPlaying) {
+                yield return new WaitForSeconds(5f);
+                while (true) {
+                    passedController.gameObject.SetActive(true);
+                    passedController.startMessages();
+                    yield return new WaitUntil(() => passedController.gameObject.activeSelf == false);
+                    break;
+                }
+                if (!passedController.trueIfRetryFalseIfContinue) {
+                    stepIndex++;
+                }
+            }
+            if (stepIndex == songNames.Count() + 1) {
                 break;
             }
-
-            yield return null;
+            //if we are out of steps break
         }
-        fx.SetActive(false);
-        fcheck.SetActive(true);
-
-        yield return new WaitForSeconds(1f);
-
-        ex.SetActive(true);
-        while (true)
-        {
-            nowpressed = MidiInputs.instance.getPressed();
-            nowpressed.Sort();
-
-            if (nowpressed.SequenceEqual(eminor))
-            {
-                break;
-            }
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(1f);
-
-        ex.SetActive(false);
-        echeck.SetActive(true);
+        youWinPanel.gameObject.SetActive(true);
+        //you won good job       
 
     }
 
