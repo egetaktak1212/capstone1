@@ -20,7 +20,8 @@ public class MidiInputs : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) {
+        if (instance == null)
+        {
             instance = this;
         }
     }
@@ -28,11 +29,16 @@ public class MidiInputs : MonoBehaviour
     void Start()
     {
 
-        foreach (Transform child in pianomodel.transform) {
-            if (child != null) {
+        foreach (Transform child in pianomodel.transform)
+        {
+            if (child != null)
+            {
                 keys[child.name] = child;
             }
         }
+
+
+
     }
 
 
@@ -42,7 +48,8 @@ public class MidiInputs : MonoBehaviour
     {
         //Debug.Log($"note: {note.noteNumber} vel={velocity}");
 
-        if (!pressed.Contains(note.noteNumber)) {
+        if (!pressed.Contains(note.noteNumber))
+        {
             pressed.Add(note.noteNumber);
         }
 
@@ -59,11 +66,13 @@ public class MidiInputs : MonoBehaviour
 
         string noteName = note.noteNumber.ToString();
 
-        if (keys.TryGetValue(noteName, out Transform key)) {
+        if (keys.TryGetValue(noteName, out Transform key))
+        {
             key.GetComponent<PressLift>().pressed = true;
         }
 
-        if (!supposedToPress.Contains(note.noteNumber)) {
+        if (!supposedToPress.Contains(note.noteNumber))
+        {
             Debug.Log("BAD BAD BAD");
         }
 
@@ -102,8 +111,21 @@ public class MidiInputs : MonoBehaviour
 
     }
 
-    public List<int> getPressed() {
+    public List<int> getPressed()
+    {
         return pressed;
+    }
+
+    private void Update()
+    {
+        //Debug.Log("-------------------");
+        //foreach (int value in upcomingNotes)
+        //{ 
+        //    Debug.Log(value);
+        
+        
+        //}
+        //Debug.Log("-------------------");
     }
 
 

@@ -23,6 +23,14 @@ public class NoteView2 : MonoBehaviour
         //MidiInputs.instance.upcomingNotes.Add(noteOn.Value);
     }
 
+    private void OnDestroy()
+    {
+        //MidiInputs.instance.supposedToPress.Remove(noteOn.Value);
+        //MidiInputs.instance.upcomingNotes.Contains(noteOn.Value);
+        //MidiInputs.instance.upcomingNotes.Remove(noteOn.Value);
+        //MidiInputs.instance.upcomingNotes.Contains(noteOn.Value);
+
+    }
 
     //-1.062
     public void Update()
@@ -38,7 +46,6 @@ public class NoteView2 : MonoBehaviour
             getNotesPressed();
             if (isOurNoteBeingPressed(notesPressed, noteOn.Value)) //if we pressed
             {
-                
 
                 played = true;
 
@@ -49,18 +56,17 @@ public class NoteView2 : MonoBehaviour
                 gameObject.GetComponent<Renderer>().material = MatPlayed;// .color = Color.red;
 
                 Debug.Log("PRESSED CORRECTLY");
-                MidiInputs.instance.supposedToPress.Remove(noteOn.Value);
-                MidiInputs.instance.upcomingNotes.Remove(noteOn.Value);
+                PlayerInfo.instance.increaseHealth(3);
                 Destroy(this.gameObject);
                 
             }
         }
         if (!played && transform.position.z >= -0.8) {
-            MidiInputs.instance.supposedToPress.Remove(noteOn.Value);
-            MidiInputs.instance.upcomingNotes.Remove(noteOn.Value);
             Debug.Log("YOU DIDNT PRESS");
+            PlayerInfo.instance.decreaseHealth(15);
             Destroy(this.gameObject);
             
+
         }
     }
 

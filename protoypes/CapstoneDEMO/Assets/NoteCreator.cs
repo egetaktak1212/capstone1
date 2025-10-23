@@ -66,7 +66,7 @@ public class NoteCreator : MonoBehaviour
                     // Instantiate a GameObject to represent this midi event in the 3D world
                     if (mptkEvent.Track == 1)
                     {
-                        MidiInputs.instance.upcomingNotes.Add(normalizeNoteValue(mptkEvent.Value));
+                        //MidiInputs.instance.upcomingNotes.Add(normalizeNoteValue(mptkEvent.Value));
                         Vector3 position = getNoteStartPosition(mptkEvent.Value);
 
                         NoteView2 noteview = Instantiate<NoteView2>(NoteDisplay, position, Quaternion.identity);
