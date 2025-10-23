@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
     List<string> songNames = new List<string> {
         "stageOne",
         "stageTwo",
-        "stageThree"
+        "stageThree",
+        "stageFour",
+        "stageFive",
+        "stageSix"
     };
 
 
@@ -58,6 +61,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             PlayerInfo.instance.resetLife();
+            clearNotes();
 
             //make the mesages run and dont cont until we are done displaying messages
             messageEmpty.gameObject.SetActive(true);
@@ -74,7 +78,7 @@ public class GameManager : MonoBehaviour
 
                 //if the player dies, break and send them back up to the top
 
-                if (!midiPlayer.MPTK_IsPlaying)
+                if (!midiPlayer.MPTK_IsPlaying && !areNotesInPlay())
                 {
                     break;
                 }
@@ -94,7 +98,7 @@ public class GameManager : MonoBehaviour
                 }
                 
             } else if (!midiPlayer.MPTK_IsPlaying) {
-                yield return new WaitForSeconds(5f);
+                //yield return new WaitForSeconds(5f);
                 while (true) {
                     passedController.gameObject.SetActive(true);
                     passedController.startMessages();
@@ -113,6 +117,22 @@ public class GameManager : MonoBehaviour
         youWinPanel.gameObject.SetActive(true);
         //you won good job       
 
+    }
+
+    GameObject[] getNotesInPlay() {
+        return GameObject.FindGameObjectsWithTag("NoteObject");
+    }
+
+    bool areNotesInPlay() {
+        GameObject[] listOfNotes = getNotesInPlay();
+        return listOfNotes.Length > 0;
+    }
+
+    void clearNotes() {
+        GameObject[] listOfNotes = getNotesInPlay();
+        foreach (GameObject note in listOfNotes) { 
+            Destroy(note);
+        }
     }
 
 
