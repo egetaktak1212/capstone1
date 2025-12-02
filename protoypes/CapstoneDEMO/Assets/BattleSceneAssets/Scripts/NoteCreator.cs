@@ -1,15 +1,8 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 using MidiPlayerTK;
-using System;
-using UnityEngine.Events;
-using DemoMPTK;
-using MPTKDemoCatchMusic;
-using UnityEditor.Experimental.GraphView;
-using Unity.VisualScripting;
-using MPTK.NAudio.Midi;
-using static Unity.Burst.Intrinsics.Arm;
+
 
 public class NoteCreator : MonoBehaviour
 {
@@ -30,8 +23,6 @@ public class NoteCreator : MonoBehaviour
     {
         if (midiFilePlayer != null)
         {
-            // No listener defined. Set now by script. NotesToPlay will be called for each new notes read from Midi file
-            Debug.Log("MusicView: Maestro Event MidiFilePlayer.OnEventNotesMidi set by script (see MusicView.cs). Setting with the inspector is also possible.");
             midiFilePlayer.OnEventNotesMidi.AddListener(NotesToPlay);
         }
         else

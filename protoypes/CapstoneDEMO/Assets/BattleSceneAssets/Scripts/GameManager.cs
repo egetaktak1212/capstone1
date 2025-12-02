@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using MidiPlayerTK;
-using NUnit.Framework;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
 
-    int stepIndex = 1;
+    int stepIndex = 0;
 
     bool songOver;
 
@@ -18,6 +16,12 @@ public class GameManager : MonoBehaviour
     public DeadController deadController;
     public PassedController passedController;
     public GameObject youWinPanel;
+
+    [SerializeField] NotePreview notePreview;
+
+    [SerializeField] Animator starterAnimation;
+
+    [SerializeField] EnemyDisplayManager enemyDisplayManager;
 
     public MidiFilePlayer midiPlayer;
 
@@ -47,10 +51,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-
-
-
-
     }
 
     //IEnumerator startAnimation() {
@@ -58,26 +58,34 @@ public class GameManager : MonoBehaviour
     //}
 
 
+
+
+
+
     IEnumerator playGameSteps()
     {
-        //initial game info
-        messageEmpty.gameObject.SetActive(true);
-        messageEmpty.startMessages(0);
-        yield return new WaitUntil(() => messageEmpty.gameObject.activeSelf == false);
-
+        //wait for animations
+        yield return new WaitUntil(() => starterAnimation.GetCurrentAnimatorStateInfo(0).IsName("PianoStill"));
+        Debug.Log("anim over");
+        yield return new WaitForSeconds(2f);
         while (true)
         {
-            PlayerInfo.instance.resetLife();
             clearNotes();
+            PlayerInfo.instance.resetLife();
 
+            enemyDisplayManager.speakingDisplay();
             //make the mesages run and dont cont until we are done displaying messages
             messageEmpty.gameObject.SetActive(true);
             messageEmpty.startMessages(stepIndex);
             yield return new WaitUntil(() => messageEmpty.gameObject.activeSelf == false);
+            enemyDisplayManager.defaultDisplay();
 
-            midiPlayer.MPTK_MidiName = songNames[stepIndex-1];//i did minus one cuz i want the 0 to be the intro text
+            yield return StartCoroutine(notePreview.startNotePreview(songNames[stepIndex]));
+
+            midiPlayer.MPTK_MidiName = songNames[stepIndex];
             midiPlayer.MPTK_Play();
 
+            
            
             while (true)
             {
@@ -97,6 +105,7 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
             if (PlayerInfo.instance.dead) {
+                enemyDisplayManager.playerLoseDisplay();
                 while (true) { 
                     deadController.gameObject.SetActive(true);
                     deadController.startMessages();
@@ -105,7 +114,7 @@ public class GameManager : MonoBehaviour
                 }
                 
             } else if (!midiPlayer.MPTK_IsPlaying) {
-                //yield return new WaitForSeconds(5f);
+                enemyDisplayManager.playerWinDisplay();
                 while (true) {
                     passedController.gameObject.SetActive(true);
                     passedController.startMessages();
@@ -116,7 +125,7 @@ public class GameManager : MonoBehaviour
                     stepIndex++;
                 }
             }
-            if (stepIndex == songNames.Count() + 1) {
+            if (stepIndex == songNames.Count()) {
                 break;
             }
             //if we are out of steps break

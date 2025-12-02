@@ -23,6 +23,7 @@ Shader "Supyrb/Unlit/ToonShadowTexture"
             #pragma fragment frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -52,12 +53,10 @@ Shader "Supyrb/Unlit/ToonShadowTexture"
             {
                 Varyings OUT;
 
-                float3 worldPos = TransformObjectToWorld(IN.positionOS).xyz;
-
+                float3 worldPos = TransformObjectToWorld(IN.positionOS.xyz);
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
 
-                // URP 7 shadow system
                 OUT.shadowCoord = TransformWorldToShadowCoord(worldPos);
 
                 return OUT;
@@ -78,52 +77,56 @@ Shader "Supyrb/Unlit/ToonShadowTexture"
         }
 
         Pass
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
+{
+    Name "ShadowCaster"
+    Tags { "LightMode" = "ShadowCaster" }
 
-            ZWrite On
-            ZTest LEqual
-            ColorMask 0
-            Cull Back
+    ZWrite On
+    ZTest LEqual
+    Cull Back
+    ColorMask 0
 
-            HLSLPROGRAM
-            #pragma vertex ShadowVert
-            #pragma fragment ShadowFrag
+    HLSLPROGRAM
+    #pragma vertex ShadowCasterVertex
+    #pragma fragment ShadowCasterFragment
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            struct Attributes
-            {
-                float4 positionOS : POSITION;
-                float3 normalOS : NORMAL;
-            };
+    struct Attributes
+    {
+        float4 positionOS : POSITION;
+        float3 normalOS   : NORMAL;
+    };
 
-            struct Varyings
-            {
-                float4 positionHCS : SV_POSITION;
-            };
+    struct Varyings
+    {
+        float4 positionHCS : SV_POSITION;
+    };
 
-            Varyings ShadowVert(Attributes IN)
-            {
-                Varyings OUT;
+    Varyings ShadowCasterVertex(Attributes IN)
+    {
+        Varyings OUT;
 
-                float3 worldPos = TransformObjectToWorld(IN.positionOS).xyz;
-                float3 worldNormal = TransformObjectToWorldNormal(IN.normalOS);
+        float3 worldPos    = TransformObjectToWorld(IN.positionOS.xyz);
+        float3 worldNormal = TransformObjectToWorldNormal(IN.normalOS);
 
-                float4 clipPos = TransformWorldToHClip(worldPos);
+        float3 lightDir = _MainLightPosition.xyz;
 
-                OUT.positionHCS = UnityApplyLinearShadowBias(clipPos, worldNormal);
+        float4 shadowPos = float4(worldPos, 1.0);
+        ApplyShadowBias(shadowPos, worldNormal, lightDir);
 
-                return OUT;
-            }
+        OUT.positionHCS = TransformWorldToHClip(shadowPos.xyz);
 
-            float4 ShadowFrag(Varyings i) : SV_Target
-            {
-                return 0;
-            }
+        return OUT;
+    }
 
-            ENDHLSL
-        }
+    float4 ShadowCasterFragment(Varyings IN) : SV_Target
+    {
+        return 0;
+    }
+    ENDHLSL
+}
+
     }
 }
