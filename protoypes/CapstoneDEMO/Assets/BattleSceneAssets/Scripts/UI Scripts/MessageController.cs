@@ -36,20 +36,20 @@ public class MessageController : MonoBehaviour
         
     }
 
-    public void startMessages(int index) {
+    public void startMessages(List<string> index) {
         if (speakinMessages != null) { 
             StopCoroutine(speakinMessages);
         }
 
-        currentTurn = index;
+        //currentTurn = index;
         currentMessage = 0;
 
-        speakinMessages = StartCoroutine(messageCoroutine());
+        speakinMessages = StartCoroutine(messageCoroutine(index));
 
     }
 
-    IEnumerator messageCoroutine() { 
-        List<string> thisTurnMessages = turnMessages[currentTurn];
+    IEnumerator messageCoroutine(List<string> index) { 
+        List<string> thisTurnMessages = index;
 
         while (currentMessage < thisTurnMessages.Count) { 
             messageText.text = thisTurnMessages[currentMessage];

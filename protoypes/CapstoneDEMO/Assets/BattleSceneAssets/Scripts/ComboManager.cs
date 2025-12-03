@@ -99,6 +99,7 @@ public class ComboManager : MonoBehaviour
 
             currentRank++;
             currentRank = Math.Clamp(currentRank, 0, comboRanks.Count - 1);
+            PlayerInfo.instance.setComboRank(currentRank);
             hitsPerRank = 0;
         }
 
@@ -110,6 +111,7 @@ public class ComboManager : MonoBehaviour
         comboCount = 0;
         hitsPerRank = 0;
         currentRank = 0;
+        PlayerInfo.instance.setComboRank(currentRank);
 
         foreach (Image image in comboSprites)
         {

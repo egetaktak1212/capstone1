@@ -86,17 +86,13 @@ public class NoteView2 : MonoBehaviour
                 FirstNotePlayed = true;
 
 
-                Debug.Log("PRESSED CORRECTLY");
-                ComboManager.instance.noteHappened(true);
-                PlayerInfo.instance.increaseHealth(3);
+                GameManager.instance.notePressedCorrectly();
                 Destroy(this.gameObject);
                 
             }
         }
         if (!played && transform.position.z >= rangeStop.transform.position.z) {
-            Debug.Log("YOU DIDNT PRESS");
-            PlayerInfo.instance.madeAMistake();
-            PlayerInfo.instance.decreaseHealth(15);
+            GameManager.instance.noteNotPressedCorrectly();
             Destroy(this.gameObject);
             
 

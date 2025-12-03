@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour
 {
+
+    public event Action madeAMistakeEvent;
 
     public int maxhealth = 100;
 
@@ -15,6 +18,8 @@ public class PlayerInfo : MonoBehaviour
     public bool dead = false;
 
     public int mistakeCounter = 0;
+
+    public int comboRank = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -71,7 +76,12 @@ public class PlayerInfo : MonoBehaviour
 
     public void madeAMistake() {
         mistakeCounter++;
+        madeAMistakeEvent.Invoke();
         ComboManager.instance.noteHappened(false);
+    }
+
+    public void setComboRank(int stage) { 
+        comboRank = stage;
     }
 
 
