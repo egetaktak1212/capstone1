@@ -33,7 +33,7 @@ public class EnemyInfo : MonoBehaviour
     void Start()
     {
         PlayerInfo.instance.madeAMistakeEvent += updateBar;
-        updateBar();
+        
     }
 
     // Update is called once per frame
@@ -48,7 +48,7 @@ public class EnemyInfo : MonoBehaviour
 
         maxhealth = 100;
         health = 100;
-
+        updateBar();
     }
 
     // Update is called once per frame

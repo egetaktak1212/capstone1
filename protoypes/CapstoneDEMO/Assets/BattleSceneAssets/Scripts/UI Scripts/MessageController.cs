@@ -18,11 +18,20 @@ public class MessageController : MonoBehaviour
     new List<string> { "Your final challenge.", "I have mixed chords with single notes.", "I'm progressive like that."}
 };
 
+    [SerializeField] Animator animator;
+
+
     Coroutine speakinMessages;
 
     int currentTurn;
     int currentMessage;
     bool waitingForButtonPress = false;
+
+    private void OnEnable()
+    {
+        animator.SetTrigger("MessageAppear");
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

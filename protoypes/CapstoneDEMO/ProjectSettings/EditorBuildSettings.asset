@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/PianoBackup.unity
     guid: cb66474c0e8961442b99c3e1ace80471
-  - enabled: 1
-    path: Assets/Scenes/PianoBackup 1.unity
+  - enabled: 0
+    path: Assets/Scenes/BossTemplate.unity
     guid: c76cd42e671214545952e8ae440bae89
+  - enabled: 1
+    path: Assets/Scenes/TutorialBoss.unity
+    guid: f6ecaab5e73183e4e951b6fa6abd5bbf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -70,13 +70,18 @@ public class PlayerInfo : MonoBehaviour
     public void resetLife() {
         health = maxhealth;
         dead = false;
-        mistakeCounter = 0;
+        resetMistakes();
         updateBar();
     }
 
+    public void resetMistakes() {
+        mistakeCounter = 0;
+    }
+
+
     public void madeAMistake() {
         mistakeCounter++;
-        madeAMistakeEvent.Invoke();
+        madeAMistakeEvent?.Invoke();
         ComboManager.instance.noteHappened(false);
     }
 

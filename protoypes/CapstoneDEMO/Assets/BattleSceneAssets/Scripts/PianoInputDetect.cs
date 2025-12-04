@@ -102,8 +102,7 @@ public class MidiInputs : MonoBehaviour
             if (!supposedToPress.Contains(note.noteNumber))
             {
                 validPresses.Remove(note.noteNumber);
-                PlayerInfo.instance.decreaseHealth(5);
-                PlayerInfo.instance.madeAMistake();
+                BossManager.instance.noteMispress();
             }
         }
 

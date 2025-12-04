@@ -86,13 +86,13 @@ public class NoteView2 : MonoBehaviour
                 FirstNotePlayed = true;
 
 
-                GameManager.instance.notePressedCorrectly();
+                BossManager.instance.notePressedCorrectly();
                 Destroy(this.gameObject);
                 
             }
         }
         if (!played && transform.position.z >= rangeStop.transform.position.z) {
-            GameManager.instance.noteNotPressedCorrectly();
+            BossManager.instance.noteNotPressedCorrectly();
             Destroy(this.gameObject);
             
 
